@@ -11,13 +11,14 @@ use Twig\TwigFunction;
 /**
  * Twig helpers shared by simple Slim/Twig front sites:
  *
- *   asset(file, versionable = true)  → versioned URL under the web root
- *   jizyImg(src, alt, zoom = false)  → native lazy <img>, picviewer-ready
+ *   asset(file, versionable = true)          → versioned URL under the web root
+ *   jizyImg(src, alt, zoom = false, width=0) → native lazy <img>, picviewer-ready;
+ *                                              width>0 → on-demand cached thumbnail
+ *                                              (src=thumb + data-src=original for lozad)
  *
- * Framework-free replacement for the framework's JizyTwigExtension, which is
- * coupled to the Callisto kernel (Config, Asset\Package, the GD/Imagine Image
- * pipeline). Register it on the site's Twig environment with the public path
- * and a cache-busting version string.
+ * Framework-free replacement for the framework's JizyTwigExtension. Register it on
+ * the site's Twig environment with the public path, a cache-busting version string,
+ * and (optionally) the thumbnail cache dir + cache-life.
  *
  * @author Joffrey Demetz <joffrey.demetz@gmail.com>
  */
@@ -25,10 +26,14 @@ class FrontUiExtension extends AbstractExtension
 {
     private Image $image;
 
-    public function __construct(private string $publicPath, private string $assetVersion = '')
-    {
+    public function __construct(
+        private string $publicPath,
+        private string $assetVersion = '',
+        string $thumbsDir = 'thumbs',
+        int $cacheLife = 0,
+    ) {
         $this->publicPath = rtrim($publicPath, '/\\');
-        $this->image = new Image($this->publicPath);
+        $this->image = new Image($this->publicPath, $thumbsDir, $cacheLife);
     }
 
     public function getFunctions(): array
@@ -55,11 +60,11 @@ class FrontUiExtension extends AbstractExtension
     }
 
     /**
-     * Native lazy <img>. When $zoom is true the picviewer gallery attributes
-     * are added so the bundled Modalizer.picviewer can open it.
+     * Native lazy <img>. When $zoom is true the picviewer gallery attribute is
+     * added. When $width > 0 an on-demand thumbnail is generated/served.
      */
-    public function jizyImg(string $src, string $alt = '', bool $zoom = false): string
+    public function jizyImg(string $src, string $alt = '', bool $zoom = false, int $width = 0): string
     {
-        return $this->image->render($src, $alt, $zoom);
+        return $this->image->render($src, $alt, $zoom, $width);
     }
 }
