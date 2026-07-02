@@ -16,6 +16,9 @@ namespace JDZ\FrontUi\Html;
  * lozad lazy-loader + picviewer (`data-zoom`) expect. width 0 (the default) keeps
  * the original thumbnail-free behavior, so existing callers are unaffected.
  *
+ * Optional fallback: when a $fallbackSrc is configured, a missing source renders
+ * that placeholder instead of a broken <img>. Empty (the default) = no fallback.
+ *
  * @author Joffrey Demetz <joffrey.demetz@gmail.com>
  */
 class Image
@@ -23,18 +26,28 @@ class Image
     private string $publicPath;
     private string $thumbsDir;
     private int $cacheLife;
+    private string $fallbackSrc;
 
-    public function __construct(string $publicPath, string $thumbsDir = 'thumbs', int $cacheLife = 0)
+    public function __construct(string $publicPath, string $thumbsDir = 'thumbs', int $cacheLife = 0, string $fallbackSrc = '')
     {
         $this->publicPath = rtrim($publicPath, '/\\');
         $this->thumbsDir = trim($thumbsDir, '/\\');
         $this->cacheLife = $cacheLife;
+        $this->fallbackSrc = $fallbackSrc;
     }
 
     public function render(string $src, string $alt = '', bool $zoom = false, int $width = 0): string
     {
         $src = ltrim($src, '/');
         $full = $this->publicPath . '/' . $src;
+
+        // Missing source → serve the configured fallback placeholder (if any),
+        // skipping thumbnail/orientation/zoom (nothing to size or zoom).
+        if ('' !== $this->fallbackSrc && !is_file($full)) {
+            return '<img src="' . htmlspecialchars($this->fallbackSrc, ENT_QUOTES, 'UTF-8')
+                . '" alt="' . htmlspecialchars(trim(str_replace('"', '', $alt)), ENT_QUOTES, 'UTF-8')
+                . '" loading="lazy" />';
+        }
 
         $attrs = [
             'src' => '/' . $src,

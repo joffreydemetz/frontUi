@@ -31,9 +31,10 @@ class FrontUiExtension extends AbstractExtension
         private string $assetVersion = '',
         string $thumbsDir = 'thumbs',
         int $cacheLife = 0,
+        string $fallbackSrc = '',
     ) {
         $this->publicPath = rtrim($publicPath, '/\\');
-        $this->image = new Image($this->publicPath, $thumbsDir, $cacheLife);
+        $this->image = new Image($this->publicPath, $thumbsDir, $cacheLife, $fallbackSrc);
     }
 
     public function getFunctions(): array
