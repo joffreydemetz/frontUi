@@ -25,12 +25,14 @@ framework's `JizyTwigExtension`, which is coupled to the Callisto kernel
 
 - `asset(file, versionable = true)` — root-absolute URL with an optional
   cache-busting `?v=…` query.
-- `jizyImg(src, alt, zoom = false)` — `<img loading="lazy">` with width/height
-  read from the source file; `zoom` adds the `data-zoom` attribute the bundled
-  `Modalizer.picviewer` reads to open a gallery layer.
+- `jizyImg(src, alt, zoom = false, width = 0)` — `<img loading="lazy">` with
+  width/height of the file served (jdz/ui ≥ 1.2); `zoom` adds the `data-zoom`
+  attribute the bundled `Modalizer.picviewer` reads to open a gallery layer;
+  `width > 0` serves an on-demand cached thumbnail (`src` = thumb, `data-src` =
+  original for lozad) — the attributes are then the thumb's.
 
-Thumbnail generation is intentionally out of scope — a simple front site serves
-the original asset with native lazy-loading.
+Without a `width`, a simple front site serves the original asset with native
+lazy-loading — thumbnails are opt-in per call.
 
 ## Usage
 
