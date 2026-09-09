@@ -5,8 +5,7 @@ Framework-agnostic front UI helpers for simple Slim/Twig sites.
 The front-end counterpart to [`jdz/adminUi`](https://jdz.joffreydemetz.com/adminui):
 small, dependency-light Twig helpers shared by sites that ship the
 `jizy-front.js` / `jizy-front.css` bundle without the Callisto framework
-runtime — jupiter's own properties and the saturn sites migrated to a plain
-Slim front.
+runtime — sites that moved to a plain Slim front.
 
 ## Contents
 
