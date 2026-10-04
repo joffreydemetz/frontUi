@@ -27,20 +27,9 @@
         "jdz/ui": "^1.0",
         "twig/twig": "^3.0"
     },
-    "require-dev": {
-        "phpunit/phpunit": "^11.0"
-    },
     "autoload": {
         "psr-4": {
             "JDZ\\FrontUi\\": "src/"
         }
-    },
-    "autoload-dev": {
-        "psr-4": {
-            "JDZ\\FrontUi\\Tests\\": "tests/"
-        }
-    },
-    "scripts": {
-        "test": "phpunit --colors=always --testdox"
     }
 }
