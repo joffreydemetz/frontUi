@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Canonical phpunit.xml of every jdz/* and jdz-private/* package (2026-10-10).
+      <testsuites>
+        <testsuite name="tests">
+            <directory>tests</directory>
+        </testsuite>
+    </testsuites> is the package's own <testsuites> block: directories by preference.
+  A <file> list runs nothing left off it (phpunit-all.ps1 check catches that), and
+  <exclude> matches by path prefix (tests/Container also drops tests/ContainerTest.php).
+   is its optional <php> block (ini, env). The rest is identical across packages.
+  Coverage: XDEBUG_MODE=coverage (composer test-coverage sets it).
+  Campaign: _root/.PLANS/jdz-test-audit-2026-10.md
+-->
+<phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/11.0/phpunit.xsd"
+         bootstrap="vendor/autoload.php"
+         cacheDirectory=".phpunit.cache"
+         executionOrder="depends,defects"
+         requireCoverageMetadata="false"
+         beStrictAboutCoverageMetadata="false"
+         beStrictAboutOutputDuringTests="true"
+         displayDetailsOnPhpunitDeprecations="true"
+         displayDetailsOnTestsThatTriggerDeprecations="true"
+         displayDetailsOnTestsThatTriggerWarnings="true"
+         failOnRisky="true"
+         failOnWarning="true">
+    <testsuites>
+        <testsuite name="tests">
+            <directory>tests</directory>
+        </testsuite>
+    </testsuites>
+
+    <source>
+        <include>
+            <directory>src</directory>
+        </include>
+    </source>
+</phpunit>
